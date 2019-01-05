@@ -4,12 +4,22 @@ Created on Sat Jan  5 16:02:35 2019
 
 @author: Tobi
 """
+# CONFIGURED FOR PYTHON 2
+
 import requests
 import re
 from bs4 import BeautifulSoup
 import numpy as np
 import pandas as pd
 import time
+import sys
+
+# Specifying which iteration to start at
+# python2
+#stopped = raw_input("What iteration did the last run crash at: ")
+# python3
+stopped = int(sys.argv[1])
+
 
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
 headers = {'User-Agent':user_agent}
@@ -62,39 +72,51 @@ def URLMaker(name,platform,end=""):
     complete_url= '/'.join([base_url,full_platform,simplified_name,end])
     return complete_url
 
-extra_details = ["ESRB Descriptors:", "Number of Online Players:", "Special Controllers:", "Number of Players:"]
+try:
+   extra_up_until_now = pd.read_csv("extra_details_up_until_now.csv", index_col=0)
+   meta_games_copy = pd.merge(extra_up_until_now, meta_games_copy,how='outer')
+except:
+    print('Could not find extra details csv')
 
-for i, row in meta_games.iterrows():
-    print(row['name'], i)
-    game_metacritic_url = URLMaker(row['name'], row['console'], 'details')
-    try: 
-        game_req = requests.get(game_metacritic_url, headers = headers)
-    except:
-        meta_games_copy.to_csv('extra_details_up_until_now.csv')
-        time.sleep(20) 
-        game_req = requests.get(game_metacritic_url, headers = headers)
-    if game_req.status_code != 200:
-        print(game_req.status_code,game_metacritic_url)
-    else:
-        details_soup = BeautifulSoup(game_req.content, 'html.parser')
-        
-        # Doing publisher separately, first
-        publisher = details_soup.find_all('a', {'href': re.compile(r'/company')})[1].get_text().strip()
-        meta_games_copy.at[i,'publisher'] = publisher
-        
-        
-        game_details = details_soup.find_all('th', scope='row')
-        for detail in game_details:
-            if detail.get_text() in extra_details:
-                value = detail.next_sibling.get_text().strip()
-            elif detail.get_text() == "Genre(s):":
-                value = detail.next_sibling.next_sibling.get_text().split(',')
-                for j in range(len(value)):
-                    value[j] = value[j].strip()
-                value = np.unique(value)
-            else:
-                value = detail.next_sibling.next_sibling.get_text().strip()
-            key = detail.get_text().strip(':').lower()
-            meta_games_copy.at[i,key] = value 
+try:
+    for i, row in meta_games[stopped:].iterrows():
+        if i > 20:
+            break
+        print(row['name'], i)
+        game_metacritic_url = URLMaker(row['name'], row['console'], 'details')
+        try: 
+            game_req = requests.get(game_metacritic_url, headers = headers)
+        except:
+            #meta_games_copy.to_csv('extra_details_up_until_now.csv')
+            time.sleep(15) 
+            game_req = requests.get(game_metacritic_url, headers = headers)
+        if game_req.status_code != 200:
+            print(game_req.status_code,game_metacritic_url)
+        else:
+            details_soup = BeautifulSoup(game_req.content, 'html.parser')
+            
+            # Doing publisher separately, first
+            publisher = details_soup.find_all('a', {'href': re.compile(r'/company')})[1].get_text().strip()
+            meta_games_copy.at[i,'publisher'] = publisher
+            
+            
+            game_details = details_soup.find_all('th', scope='row')
+            for detail in game_details:
+                if detail.get_text() in extra_details:
+                    value = detail.next_sibling.get_text().strip()
+                elif detail.get_text() == "Genre(s):":
+                    value = detail.next_sibling.next_sibling.get_text().split(',')
+                    for j in range(len(value)):
+                        value[j] = value[j].strip()
+                    value = np.unique(value)
+                else:
+                    try:
+                        value = detail.next_sibling.next_sibling.get_text().strip()
+                    except:
+                        continue
+                key = detail.get_text().strip(':').lower()
+                meta_games_copy.at[i,key] = value 
+except:
+    meta_games_copy.to_csv('extra_details_up_until_now.csv')
             
 meta_games_copy.to_csv('extra_details_complete.csv')
