@@ -11,7 +11,39 @@ import numpy as np
 import pandas as pd
 import time
 import sys
-from details_scraper import URLMaker
+
+
+def URLMaker(name,platform,end=""):
+    '''Makes metacritic urls from a game name and platform. Anything given as end is appended the end of the url'''
+    base_url = 'https://www.metacritic.com/game'
+    platform_dict = {'PS':'playstation',
+                    'PS2':'playstation-2',
+                    'PS3':'playstation-3',
+                    'PS4':'playstation-4',
+                    'X360':'xbox-360',
+                    'XBOX':'xbox',
+                    'PC':'pc',
+                    'VITA':'playstation-vita',
+                    '3DS':'3ds',
+                    'DC':'dreamcast',
+                    'DS':'ds',
+                    'GBA':'game-boy-advance',
+                    'GC':'gamecube',
+                    'N64':'nintendo-64',
+                    'PSP':'psp',
+                    'Switch':'switch',
+                    'WII':'wii',
+                    'WIIU':'wii-u',
+                    'XONE':'xbox-one'}
+    full_platform = platform_dict[platform.strip()]
+    simplified_name = name.lower().strip()
+    # Getting rid of junk from the title
+    simplified_name = simplified_name.replace('\'','').replace(',','').replace(':','').replace('/','')
+    simplified_name = simplified_name.replace('.','').replace(';','').replace('& ','')
+    simplified_name = simplified_name.replace(' ', '-')
+    
+    complete_url= '/'.join([base_url,full_platform,simplified_name,end])
+    return complete_url
 
 
 def main(stopped):
@@ -76,4 +108,4 @@ try:
     stop = int(sys.argv[1])
     main(stop)
 except:
-    pass             
+    pass
