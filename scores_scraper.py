@@ -31,7 +31,7 @@ def main(stopped):
     
     
     try:
-       scores_up_until_now = pd.read_csv("scores_up_until_now.csv", index_col=0)
+       scores_up_until_now = pd.read_csv("scores_up_until_now.csv_2", index_col=0)
        meta_games_copy = pd.merge(scores_up_until_now, meta_games_copy,how='outer')
     except:
         print('Could not find scores csv')
@@ -43,7 +43,7 @@ def main(stopped):
             try: 
                 game_req = requests.get(game_metacritic_url, headers = headers)
             except:
-                meta_games_copy.to_csv('scores_up_until_now.csv')
+                meta_games_copy.to_csv('scores_up_until_now_2.csv')
                 print("Request blocked, waiting 15 seconds.")
                 time.sleep(15) 
                 game_req = requests.get(game_metacritic_url, headers = headers)
@@ -68,9 +68,9 @@ def main(stopped):
                     meta_games_copy.at[i,'review scores'] = review_score_dict
                     meta_games_copy.at[i, 'review summaries'] = review_summary_dict
     except:
-        meta_games_copy.to_csv('scores_up_until_now.csv')
+        meta_games_copy.to_csv('scores_up_until_now_2.csv')
                 
-    meta_games_copy.to_csv('scores_complete.csv')  
+    meta_games_copy.to_csv('scores_complete_2.csv')  
 
 try:
     stop = int(sys.argv[1])
