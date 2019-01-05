@@ -65,8 +65,6 @@ def URLMaker(name,platform,end=""):
 extra_details = ["ESRB Descriptors:", "Number of Online Players:", "Special Controllers:", "Number of Players:"]
 
 for i, row in meta_games.iterrows():
-    if i > 10:
-        break
     print(row['name'], i)
     game_metacritic_url = URLMaker(row['name'], row['console'], 'details')
     try: 
@@ -98,3 +96,5 @@ for i, row in meta_games.iterrows():
                 value = detail.next_sibling.next_sibling.get_text().strip()
             key = detail.get_text().strip(':').lower()
             meta_games_copy.at[i,key] = value 
+            
+meta_games_copy.to_csv('extra_details_complete.csv')
