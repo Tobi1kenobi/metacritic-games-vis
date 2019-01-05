@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jan  5 16:02:35 2019
+Created on Sat Jan  5 21:51:55 2019
 
 @author: Tobi
 """
 
 import requests
-import re
 from bs4 import BeautifulSoup
 import numpy as np
 import pandas as pd
@@ -24,18 +23,13 @@ headers = {'User-Agent':user_agent}
 # Loading in list of all games
 meta_games = pd.read_csv('Data/result.csv')
 
+#np.unique(meta_games['console'])
 
-# Making a copy of the dataframe that I will mutate
+# Making a copy of the datafram that I will mutate
 meta_games_copy = meta_games.copy()
 
-# Adding new columns for genre, publisher, etc
-details = ["genre(s)","developer","players","publisher","rating"] 
-extra_details = ["ESRB Descriptors:", "Number of Online Players:", "Special Controllers:", "Number of Players:"]
-
-for new_col in details + extra_details + ['official site']:
-    new_col = new_col.strip(':').lower()
+for new_col in ['review scores', 'review summaries']:
     meta_games_copy[new_col] = np.empty
-
 
 def URLMaker(name,platform,end=""):
     '''Makes metacritic urls from a game name and platform. Anything given as end is appended the end of the url'''
@@ -69,50 +63,46 @@ def URLMaker(name,platform,end=""):
     complete_url= '/'.join([base_url,full_platform,simplified_name,end])
     return complete_url
 
+
 try:
-   extra_up_until_now = pd.read_csv("extra_details_up_until_now.csv", index_col=0)
-   meta_games_copy = pd.merge(extra_up_until_now, meta_games_copy,how='outer')
+   scores_up_until_now = pd.read_csv("scores_up_until_now.csv", index_col=0)
+   meta_games_copy = pd.merge(scores_up_until_now, meta_games_copy,how='outer')
 except:
-    print('Could not find extra details csv')
+    print('Could not find scores csv')
 
 try:
     for i, row in meta_games[stopped:].iterrows():
         print(row['name'], i)
-        game_metacritic_url = URLMaker(row['name'], row['console'], 'details')
+        game_metacritic_url = URLMaker(row['name'], row['console'], 'critic-reviews')
         try: 
             game_req = requests.get(game_metacritic_url, headers = headers)
         except:
-            meta_games_copy.to_csv('extra_details_up_until_now.csv')
+            meta_games_copy.to_csv('scores_up_until_now.csv')
             print("Request blocked, waiting 15 seconds.")
             time.sleep(15) 
             game_req = requests.get(game_metacritic_url, headers = headers)
         if game_req.status_code != 200:
             print(game_req.status_code,game_metacritic_url)
         else:
-            details_soup = BeautifulSoup(game_req.content, 'html.parser')
-            
-            # Doing publisher separately, first
-            publisher = details_soup.find_all('a', {'href': re.compile(r'/company')})[1].get_text().strip()
-            meta_games_copy.at[i,'publisher'] = publisher
-            
-            
-            game_details = details_soup.find_all('th', scope='row')
-            for detail in game_details:
-                if detail.get_text() in extra_details:
-                    value = detail.next_sibling.get_text().strip()
-                elif detail.get_text() == "Genre(s):":
-                    value = detail.next_sibling.next_sibling.get_text().split(',')
-                    for j in range(len(value)):
-                        value[j] = value[j].strip()
-                    value = np.unique(value)
-                else:
-                    try:
-                        value = detail.next_sibling.next_sibling.get_text().strip()
-                    except:
-                        continue
-                key = detail.get_text().strip(':').lower()
-                meta_games_copy.at[i,key] = value 
+            reviews_soup = BeautifulSoup(game_req.content, 'html.parser')
+            review_metas = reviews_soup.find_all('li', {"class":"review critic_review"})
+            review_score_dict = {}
+            review_summary_dict = {}
+            for rev in review_metas:
+                try:
+                    cur_rev_critic = rev.find('div', {"class":"review_critic"}).find('a').get_text().strip()
+                except:
+                    cur_rev_critic = rev.find('div', {"class":"review_critic"}).find('div').get_text().strip()
+                cur_rev_summary = rev.find('div', {"class":"review_body"}).get_text().strip()
+                cur_rev_score = rev.find('div', {"class":"review_grade"}).get_text().strip()
+
+                review_summary_dict[cur_rev_critic] = cur_rev_summary
+                review_score_dict[cur_rev_critic] = cur_rev_score
+
+                meta_games_copy.at[i,'review scores'] = review_score_dict
+                meta_games_copy.at[i, 'review summaries'] = review_summary_dict
 except:
-    meta_games_copy.to_csv('extra_details_up_until_now.csv')
+    meta_games_copy.to_csv('scores_up_until_now.csv')
             
-meta_games_copy.to_csv('extra_details_complete.csv')
+meta_games_copy.to_csv('scores_complete.csv')
+           
