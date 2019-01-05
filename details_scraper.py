@@ -18,8 +18,10 @@ import sys
 # python2
 #stopped = raw_input("What iteration did the last run crash at: ")
 # python3
-stopped = int(sys.argv[1])
-
+try:
+    stopped = int(sys.argv[1])
+except:
+    stopped = 0
 
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
 headers = {'User-Agent':user_agent}
@@ -41,7 +43,9 @@ for new_col in details + extra_details + ['official site']:
     new_col = new_col.strip(':').lower()
     meta_games_copy[new_col] = np.empty
 
+
 def URLMaker(name,platform,end=""):
+    '''Makes metacritic urls from a game name and platform. Anything given as end is appended the end of the url'''
     base_url = 'https://www.metacritic.com/game'
     platform_dict = {'PS':'playstation',
                     'PS2':'playstation-2',
@@ -80,14 +84,13 @@ except:
 
 try:
     for i, row in meta_games[stopped:].iterrows():
-        if i > 20:
-            break
         print(row['name'], i)
         game_metacritic_url = URLMaker(row['name'], row['console'], 'details')
         try: 
             game_req = requests.get(game_metacritic_url, headers = headers)
         except:
-            #meta_games_copy.to_csv('extra_details_up_until_now.csv')
+            meta_games_copy.to_csv('extra_details_up_until_now.csv')
+            print("Request blocked, waiting 15 seconds.")
             time.sleep(15) 
             game_req = requests.get(game_metacritic_url, headers = headers)
         if game_req.status_code != 200:
