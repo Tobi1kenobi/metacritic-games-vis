@@ -46,6 +46,18 @@ def URLMaker(name,platform,end=""):
     complete_url= '/'.join([base_url,full_platform,simplified_name,end])
     return complete_url
 
+def GetFranchise(detail_soup):
+    franchise_js = detail_soup.find('script', {"type":"text/javascript",
+                                                    "src":"https://urs.metacritic.com/sdk/urs.js"}).previous_sibling.previous_sibling
+    franchise_text = franchise_js.get_text().strip().split(';')
+    for element in franchise_text:
+        element = element.strip()
+        if re.match(re.compile('MetaC.Video.setIMATargeting\(\"franchise*'), element):
+            match = element
+            match = match.split(',')[-1].strip().strip('\)').strip('\"')
+            match = match.replace('-', ' ')
+            return(match)
+
 def main(stopped):
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
     headers = {'User-Agent':user_agent}
@@ -61,16 +73,13 @@ def main(stopped):
     details = ["genre(s)","developer","players","publisher","rating"] 
     extra_details = ["ESRB Descriptors:", "Number of Online Players:", "Special Controllers:", "Number of Players:"]
     
-    for new_col in details + extra_details + ['official site']:
+    for new_col in details + extra_details + ['official site','franchise']:
         new_col = new_col.strip(':').lower()
         meta_games_copy[new_col] = np.empty
-        try:
-           extra_up_until_now = pd.read_csv("../Data/extra_details_up_until_now.csv",
-                                            index_col=0).drop_duplicates()
-           meta_games_copy = pd.merge(extra_up_until_now, meta_games_copy, how='left',
-                                      left_index=True, on=list(meta_games_copy.columns))
-        except:
-            print('Could not find extra details csv')
+    try:
+       meta_games_copy = pd.read_csv("../Data/extra_details_up_until_now.csv",index_col=0).drop_duplicates()
+    except:
+        print('Could not find extra details csv')
     try:
         for i, row in meta_games[stopped:].iterrows():
             print(row['name'], i)
@@ -85,20 +94,22 @@ def main(stopped):
             if game_req.status_code != 200:
                 print(game_req.status_code,game_metacritic_url)
             else:
-                print('In else statement')
                 details_soup = BeautifulSoup(game_req.content, 'html.parser')
                 
-                # Doing publisher separately, first
-                publisher = details_soup.find_all('a', {'href': re.compile(r'/company')})[1].get_text().strip()
-                print(publisher)
-                print(meta_games_copy.shape)
+                # Doing publisher and franchise separately, first
+                try:
+                    publisher = details_soup.find_all('a', {'href': re.compile(r'/company')})[1].get_text().strip()
+                except:
+                    publisher = np.empty
+                try:
+                    franchise = GetFranchise(details_soup)
+                except:
+                    franchise = np.empty
                 meta_games_copy.at[i,'publisher'] = publisher
-                print('New value entered')
+                meta_games_copy.at[i,'franchise'] = franchise
+                
                 game_details = details_soup.find_all('th', scope='row')
-                print(game_details)
                 for detail in game_details:
-                    print('In for loop')
-                    print(detail)
                     if detail.get_text() in extra_details:
                         value = detail.next_sibling.get_text().strip()
                     elif detail.get_text() == "Genre(s):":
