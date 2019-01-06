@@ -40,7 +40,7 @@ def URLMaker(name,platform,end=""):
     simplified_name = name.lower().strip()
     # Getting rid of junk from the title
     simplified_name = simplified_name.replace('\'','').replace(',','').replace(':','').replace('/','')
-    simplified_name = simplified_name.replace('.','').replace(';','').replace('& ','')
+    simplified_name = simplified_name.replace('.','').replace(';','').replace('& ','').replace('#',',')
     simplified_name = simplified_name.replace(' ', '-')
     
     complete_url= '/'.join([base_url,full_platform,simplified_name,end])
@@ -65,11 +65,12 @@ def main(stopped):
         new_col = new_col.strip(':').lower()
         meta_games_copy[new_col] = np.empty
         try:
-           extra_up_until_now = pd.read_csv("../Data/extra_details_up_until_now.csv", index_col=0)
-           meta_games_copy = pd.merge(extra_up_until_now, meta_games_copy,how='outer')
+           extra_up_until_now = pd.read_csv("../Data/extra_details_up_until_now.csv",
+                                            index_col=0).drop_duplicates()
+           meta_games_copy = pd.merge(extra_up_until_now, meta_games_copy, how='left',
+                                      left_index=True, on=list(meta_games_copy.columns))
         except:
             print('Could not find extra details csv')
-            
     try:
         for i, row in meta_games[stopped:].iterrows():
             print(row['name'], i)
@@ -84,15 +85,20 @@ def main(stopped):
             if game_req.status_code != 200:
                 print(game_req.status_code,game_metacritic_url)
             else:
+                print('In else statement')
                 details_soup = BeautifulSoup(game_req.content, 'html.parser')
                 
                 # Doing publisher separately, first
                 publisher = details_soup.find_all('a', {'href': re.compile(r'/company')})[1].get_text().strip()
+                print(publisher)
+                print(meta_games_copy.shape)
                 meta_games_copy.at[i,'publisher'] = publisher
-                
-                
+                print('New value entered')
                 game_details = details_soup.find_all('th', scope='row')
+                print(game_details)
                 for detail in game_details:
+                    print('In for loop')
+                    print(detail)
                     if detail.get_text() in extra_details:
                         value = detail.next_sibling.get_text().strip()
                     elif detail.get_text() == "Genre(s):":
@@ -109,8 +115,10 @@ def main(stopped):
                     meta_games_copy.at[i,key] = value 
     except:
         meta_games_copy.to_csv('../Data/extra_details_up_until_now.csv')
+        return('Stopped at:', i)
                 
-    meta_games_copy.to_csv('../Data/extra_details_up_until_now.csv')
+    meta_games_copy.to_csv('../Data/extra_details_complete.csv')
+    return('Finished')
     
 try:
     stop = int(sys.argv[1])
