@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<svg width="960" height="600"></svg>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+    var baseNodes = [{'id': 'The Last of Us', 'group': 1, 'label': 'The Last of Us', 'level': 1},
+ {'id': 'No Franchise', 'group': 3, 'label': 'No Franchise', 'level': 2},
+ {'id': 'Naughty Dog', 'group': 3, 'label': 'Naughty Dog', 'level': 2},
+ {'id': 'SCEA', 'group': 3, 'label': 'SCEA', 'level': 2},
+ {'id': 'Action Adventure',
+  'group': 3,
+  'label': 'Action Adventure',
+  'level': 2},
+ {'id': ' Adventure', 'group': 3, 'label': ' Adventure', 'level': 2},
+ {'id': ' General', 'group': 3, 'label': ' General', 'level': 2},
+ {'id': ' Modern', 'group': 3, 'label': ' Modern', 'level': 2},
+ {'id': 'online', 'group': 3, 'label': 'online', 'level': 2},
+ {'id': 'Uncharted 2: Among Thieves',
+  'group': 1,
+  'label': 'Uncharted 2: Among Thieves',
+  'level': 3},
+ {'id': "Uncharted 3: Drake's Deception",
+  'group': 1,
+  'label': "Uncharted 3: Drake's Deception",
+  'level': 3},
+ {'id': "Uncharted: Drake's Fortune",
+  'group': 1,
+  'label': "Uncharted: Drake's Fortune",
+  'level': 3},
+ {'id': 'The Last of Us: Left Behind',
+  'group': 1,
+  'label': 'The Last of Us: Left Behind',
+  'level': 3},
+ {'id': 'LittleBigPlanet', 'group': 1, 'label': 'LittleBigPlanet', 'level': 3},
+ {'id': 'The ICO & Shadow of the Colossus Collection',
+  'group': 1,
+  'label': 'The ICO & Shadow of the Colossus Collection',
+  'level': 3},
+ {'id': 'God of War III', 'group': 1, 'label': 'God of War III', 'level': 3},
+ {'id': 'Journey', 'group': 1, 'label': 'Journey', 'level': 3},
+ {'id': 'God of War Collection',
+  'group': 1,
+  'label': 'God of War Collection',
+  'level': 3},
+ {'id': 'Killzone 2', 'group': 1, 'label': 'Killzone 2', 'level': 3},
+ {'id': 'MLB 10: The Show',
+  'group': 1,
+  'label': 'MLB 10: The Show',
+  'level': 3},
+ {'id': 'LittleBigPlanet 2',
+  'group': 1,
+  'label': 'LittleBigPlanet 2',
+  'level': 3},
+ {'id': 'MLB 09: The Show',
+  'group': 1,
+  'label': 'MLB 09: The Show',
+  'level': 3},
+ {'id': 'MLB 11: The Show',
+  'group': 1,
+  'label': 'MLB 11: The Show',
+  'level': 3},
+ {'id': 'Grand Theft Auto IV',
+  'group': 1,
+  'label': 'Grand Theft Auto IV',
+  'level': 3},
+ {'id': 'Grand Theft Auto V',
+  'group': 1,
+  'label': 'Grand Theft Auto V',
+  'level': 3},
+ {'id': 'Batman: Arkham City',
+  'group': 1,
+  'label': 'Batman: Arkham City',
+  'level': 3},
+ {'id': 'Red Dead Redemption',
+  'group': 1,
+  'label': 'Red Dead Redemption',
+  'level': 3},
+ {'id': 'Metal Gear Solid 4: Guns of the Patriots',
+  'group': 1,
+  'label': 'Metal Gear Solid 4: Guns of the Patriots',
+  'level': 3},
+ {'id': "Assassin's Creed II",
+  'group': 1,
+  'label': "Assassin's Creed II",
+  'level': 3},
+ {'id': 'Batman: Arkham Asylum',
+  'group': 1,
+  'label': 'Batman: Arkham Asylum',
+  'level': 3},
+ {'id': 'Okami HD', 'group': 1, 'label': 'Okami HD', 'level': 3},
+ {'id': "Assassin's Creed: Brotherhood",
+  'group': 1,
+  'label': "Assassin's Creed: Brotherhood",
+  'level': 3},
+ {'id': 'Dishonored', 'group': 1, 'label': 'Dishonored', 'level': 3},
+ {'id': 'Pac-Man Championship Edition DX',
+  'group': 1,
+  'label': 'Pac-Man Championship Edition DX',
+  'level': 3},
+ {'id': 'L.A. Noire', 'group': 1, 'label': 'L.A. Noire', 'level': 3},
+ {'id': 'Metal Gear Solid HD Collection',
+  'group': 1,
+  'label': 'Metal Gear Solid HD Collection',
+  'level': 3},
+ {'id': 'Deus Ex: Human Revolution',
+  'group': 1,
+  'label': 'Deus Ex: Human Revolution',
+  'level': 3},
+ {'id': 'Ninja Gaiden Sigma',
+  'group': 1,
+  'label': 'Ninja Gaiden Sigma',
+  'level': 3},
+ {'id': "Assassin's Creed IV: Black Flag",
+  'group': 1,
+  'label': "Assassin's Creed IV: Black Flag",
+  'level': 3},
+ {'id': 'Hotline Miami', 'group': 1, 'label': 'Hotline Miami', 'level': 3},
+ {'id': 'Tomb Raider', 'group': 1, 'label': 'Tomb Raider', 'level': 3},
+ {'id': 'Rayman Origins', 'group': 1, 'label': 'Rayman Origins', 'level': 3},
+ {'id': 'The Walking Dead: Season Two Episode 5 - No Going Back',
+  'group': 1,
+  'label': 'The Walking Dead: Season Two Episode 5 - No Going Back',
+  'level': 3},
+ {'id': 'The Walking Dead: Episode 5 - No Time Left',
+  'group': 1,
+  'label': 'The Walking Dead: Episode 5 - No Time Left',
+  'level': 3},
+ {'id': 'The Walking Dead: Episode 3 - Long Road Ahead',
+  'group': 1,
+  'label': 'The Walking Dead: Episode 3 - Long Road Ahead',
+  'level': 3},
+ {'id': "Monkey Island 2 Special Edition: LeChuck's Revenge",
+  'group': 1,
+  'label': "Monkey Island 2 Special Edition: LeChuck's Revenge",
+  'level': 3},
+ {'id': 'Red Dead Redemption: Undead Nightmare Pack',
+  'group': 1,
+  'label': 'Red Dead Redemption: Undead Nightmare Pack',
+  'level': 3},
+ {'id': 'Valkyria Chronicles',
+  'group': 1,
+  'label': 'Valkyria Chronicles',
+  'level': 3},
+ {'id': 'Shatter', 'group': 1, 'label': 'Shatter', 'level': 3},
+ {'id': 'DmC: Devil May Cry',
+  'group': 1,
+  'label': 'DmC: Devil May Cry',
+  'level': 3},
+ {'id': 'Ni no Kuni: Wrath of the White Witch',
+  'group': 1,
+  'label': 'Ni no Kuni: Wrath of the White Witch',
+  'level': 3},
+ {'id': 'Castlevania: Lords of Shadow',
+  'group': 1,
+  'label': 'Castlevania: Lords of Shadow',
+  'level': 3},
+ {'id': "Sam & Max: The Devil's Playhouse - Episode 2: The Tomb of Sammun-Mak",
+  'group': 1,
+  'label': "Sam & Max: The Devil's Playhouse - Episode 2: The Tomb of Sammun-Mak",
+  'level': 3},
+ {'id': 'Call of Duty: Modern Warfare 2',
+  'group': 1,
+  'label': 'Call of Duty: Modern Warfare 2',
+  'level': 3},
+ {'id': 'Call of Duty 4: Modern Warfare',
+  'group': 1,
+  'label': 'Call of Duty 4: Modern Warfare',
+  'level': 3},
+ {'id': 'Far Cry 3', 'group': 1, 'label': 'Far Cry 3', 'level': 3},
+ {'id': 'Battlefield: Bad Company 2 Vietnam',
+  'group': 1,
+  'label': 'Battlefield: Bad Company 2 Vietnam',
+  'level': 3},
+ {'id': 'Battlefield: Bad Company 2',
+  'group': 1,
+  'label': 'Battlefield: Bad Company 2',
+  'level': 3},
+ {'id': 'Call of Duty: Modern Warfare 3',
+  'group': 1,
+  'label': 'Call of Duty: Modern Warfare 3',
+  'level': 3},
+ {'id': 'Resistance 2', 'group': 1, 'label': 'Resistance 2', 'level': 3},
+ {'id': 'Max Payne 3', 'group': 1, 'label': 'Max Payne 3', 'level': 3},
+ {'id': 'Heavy Rain', 'group': 1, 'label': 'Heavy Rain', 'level': 3},
+ {'id': "Tom Clancy's Rainbow Six Vegas",
+  'group': 1,
+  'label': "Tom Clancy's Rainbow Six Vegas",
+  'level': 3},
+ {'id': 'Street Fighter IV',
+  'group': 1,
+  'label': 'Street Fighter IV',
+  'level': 3},
+ {'id': 'Mass Effect 3', 'group': 1, 'label': 'Mass Effect 3', 'level': 3},
+ {'id': 'Super Street Fighter IV',
+  'group': 1,
+  'label': 'Super Street Fighter IV',
+  'level': 3},
+ {'id': 'Rock Band', 'group': 1, 'label': 'Rock Band', 'level': 3},
+ {'id': 'Borderlands 2', 'group': 1, 'label': 'Borderlands 2', 'level': 3},
+ {'id': 'Rock Band 2', 'group': 1, 'label': 'Rock Band 2', 'level': 3},
+ {'id': 'Dark Souls II', 'group': 1, 'label': 'Dark Souls II', 'level': 3},
+ {'id': 'XCOM: Enemy Unknown',
+  'group': 1,
+  'label': 'XCOM: Enemy Unknown',
+  'level': 3},
+ {'id': 'FIFA Soccer 11', 'group': 1, 'label': 'FIFA Soccer 11', 'level': 3},
+ {'id': 'Dead Space 2', 'group': 1, 'label': 'Dead Space 2', 'level': 3}]
+
+    var baseLinks = [{'source': 'Naughty Dog',
+  'target': 'Uncharted 2: Among Thieves',
+  'strength': 0.1},
+ {'source': 'Naughty Dog', 'target': 'The Last of Us', 'strength': 0.2},
+ {'source': 'Naughty Dog',
+  'target': "Uncharted 3: Drake's Deception",
+  'strength': 0.1},
+ {'source': 'Naughty Dog',
+  'target': "Uncharted: Drake's Fortune",
+  'strength': 0.1},
+ {'source': 'Naughty Dog',
+  'target': 'The Last of Us: Left Behind',
+  'strength': 0.1},
+ {'source': 'SCEA', 'target': 'Uncharted 2: Among Thieves', 'strength': 0.001},
+ {'source': 'SCEA', 'target': 'The Last of Us', 'strength': 0.2},
+ {'source': 'SCEA', 'target': 'LittleBigPlanet', 'strength': 0.1},
+ {'source': 'SCEA',
+  'target': 'The ICO & Shadow of the Colossus Collection',
+  'strength': 0.1},
+ {'source': 'SCEA',
+  'target': "Uncharted 3: Drake's Deception",
+  'strength': 0.001},
+ {'source': 'SCEA', 'target': 'God of War III', 'strength': 0.1},
+ {'source': 'SCEA', 'target': 'Journey', 'strength': 0.1},
+ {'source': 'SCEA', 'target': 'God of War Collection', 'strength': 0.1},
+ {'source': 'SCEA', 'target': 'Killzone 2', 'strength': 0.1},
+ {'source': 'SCEA', 'target': 'MLB 10: The Show', 'strength': 0.1},
+ {'source': 'SCEA', 'target': 'LittleBigPlanet 2', 'strength': 0.1},
+ {'source': 'SCEA', 'target': 'MLB 09: The Show', 'strength': 0.1},
+ {'source': 'SCEA', 'target': 'MLB 11: The Show', 'strength': 0.1},
+ {'source': 'Action Adventure',
+  'target': 'Grand Theft Auto IV',
+  'strength': 0.1},
+ {'source': 'Action Adventure',
+  'target': 'Grand Theft Auto V',
+  'strength': 0.1},
+ {'source': 'Action Adventure',
+  'target': 'Batman: Arkham City',
+  'strength': 0.1},
+ {'source': 'Action Adventure',
+  'target': 'Uncharted 2: Among Thieves',
+  'strength': 0.001},
+ {'source': 'Action Adventure', 'target': 'The Last of Us', 'strength': 0.2},
+ {'source': 'Action Adventure',
+  'target': 'Red Dead Redemption',
+  'strength': 0.1},
+ {'source': 'Action Adventure',
+  'target': 'Metal Gear Solid 4: Guns of the Patriots',
+  'strength': 0.1},
+ {'source': 'Action Adventure',
+  'target': 'The ICO & Shadow of the Colossus Collection',
+  'strength': 0.001},
+ {'source': 'Action Adventure',
+  'target': "Uncharted 3: Drake's Deception",
+  'strength': 0.001},
+ {'source': 'Action Adventure', 'target': 'God of War III', 'strength': 0.001},
+ {'source': 'Action Adventure',
+  'target': "Assassin's Creed II",
+  'strength': 0.1},
+ {'source': 'Action Adventure',
+  'target': 'God of War Collection',
+  'strength': 0.001},
+ {'source': 'Action Adventure',
+  'target': 'Batman: Arkham Asylum',
+  'strength': 0.1},
+ {'source': 'Action Adventure', 'target': 'Okami HD', 'strength': 0.1},
+ {'source': 'Action Adventure',
+  'target': "Assassin's Creed: Brotherhood",
+  'strength': 0.1},
+ {'source': 'Action Adventure', 'target': 'Dishonored', 'strength': 0.1},
+ {'source': ' Adventure', 'target': 'Grand Theft Auto IV', 'strength': 0.001},
+ {'source': ' Adventure', 'target': 'Grand Theft Auto V', 'strength': 0.001},
+ {'source': ' Adventure', 'target': 'Batman: Arkham City', 'strength': 0.001},
+ {'source': ' Adventure',
+  'target': 'Uncharted 2: Among Thieves',
+  'strength': 0.001},
+ {'source': ' Adventure', 'target': 'The Last of Us', 'strength': 0.2},
+ {'source': ' Adventure', 'target': 'Red Dead Redemption', 'strength': 0.001},
+ {'source': ' Adventure',
+  'target': 'Metal Gear Solid 4: Guns of the Patriots',
+  'strength': 0.001},
+ {'source': ' Adventure',
+  'target': 'The ICO & Shadow of the Colossus Collection',
+  'strength': 0.001},
+ {'source': ' Adventure',
+  'target': "Uncharted 3: Drake's Deception",
+  'strength': 0.001},
+ {'source': ' Adventure', 'target': 'God of War III', 'strength': 0.001},
+ {'source': ' Adventure', 'target': 'Journey', 'strength': 0.001},
+ {'source': ' Adventure', 'target': "Assassin's Creed II", 'strength': 0.001},
+ {'source': ' Adventure',
+  'target': 'God of War Collection',
+  'strength': 0.001},
+ {'source': ' Adventure',
+  'target': 'Batman: Arkham Asylum',
+  'strength': 0.001},
+ {'source': ' Adventure',
+  'target': 'Pac-Man Championship Edition DX',
+  'strength': 0.1},
+ {'source': ' Adventure', 'target': 'Okami HD', 'strength': 0.001},
+ {'source': ' Adventure',
+  'target': "Assassin's Creed: Brotherhood",
+  'strength': 0.001},
+ {'source': ' Adventure', 'target': 'Dishonored', 'strength': 0.001},
+ {'source': ' Adventure', 'target': 'L.A. Noire', 'strength': 0.1},
+ {'source': ' Adventure',
+  'target': 'Metal Gear Solid HD Collection',
+  'strength': 0.1},
+ {'source': ' Adventure',
+  'target': 'Deus Ex: Human Revolution',
+  'strength': 0.1},
+ {'source': ' Adventure', 'target': 'Ninja Gaiden Sigma', 'strength': 0.1},
+ {'source': ' Adventure',
+  'target': "Uncharted: Drake's Fortune",
+  'strength': 0.001},
+ {'source': ' Adventure',
+  'target': 'The Last of Us: Left Behind',
+  'strength': 0.001},
+ {'source': ' Adventure',
+  'target': "Assassin's Creed IV: Black Flag",
+  'strength': 0.1},
+ {'source': ' Adventure', 'target': 'Hotline Miami', 'strength': 0.1},
+ {'source': ' Adventure', 'target': 'Tomb Raider', 'strength': 0.1},
+ {'source': ' Adventure', 'target': 'Rayman Origins', 'strength': 0.1},
+ {'source': ' Adventure',
+  'target': 'The Walking Dead: Season Two Episode 5 - No Going Back',
+  'strength': 0.1},
+ {'source': ' General', 'target': 'The Last of Us', 'strength': 0.2},
+ {'source': ' General',
+  'target': 'Metal Gear Solid 4: Guns of the Patriots',
+  'strength': 0.001},
+ {'source': ' General', 'target': 'Journey', 'strength': 0.001},
+ {'source': ' General', 'target': 'Batman: Arkham Asylum', 'strength': 0.001},
+ {'source': ' General',
+  'target': 'Pac-Man Championship Edition DX',
+  'strength': 0.001},
+ {'source': ' General', 'target': 'Okami HD', 'strength': 0.001},
+ {'source': ' General', 'target': 'Dishonored', 'strength': 0.001},
+ {'source': ' General',
+  'target': 'Deus Ex: Human Revolution',
+  'strength': 0.001},
+ {'source': ' General', 'target': 'Ninja Gaiden Sigma', 'strength': 0.001},
+ {'source': ' General',
+  'target': 'The Walking Dead: Episode 5 - No Time Left',
+  'strength': 0.1},
+ {'source': ' General',
+  'target': 'The Last of Us: Left Behind',
+  'strength': 0.001},
+ {'source': ' General', 'target': 'Hotline Miami', 'strength': 0.001},
+ {'source': ' General', 'target': 'Tomb Raider', 'strength': 0.001},
+ {'source': ' General',
+  'target': 'The Walking Dead: Season Two Episode 5 - No Going Back',
+  'strength': 0.001},
+ {'source': ' General',
+  'target': 'The Walking Dead: Episode 3 - Long Road Ahead',
+  'strength': 0.1},
+ {'source': ' General',
+  'target': "Monkey Island 2 Special Edition: LeChuck's Revenge",
+  'strength': 0.1},
+ {'source': ' General',
+  'target': 'Red Dead Redemption: Undead Nightmare Pack',
+  'strength': 0.1},
+ {'source': ' General', 'target': 'Valkyria Chronicles', 'strength': 0.1},
+ {'source': ' General', 'target': 'Shatter', 'strength': 0.1},
+ {'source': ' General', 'target': 'DmC: Devil May Cry', 'strength': 0.1},
+ {'source': ' General',
+  'target': 'Ni no Kuni: Wrath of the White Witch',
+  'strength': 0.1},
+ {'source': ' General',
+  'target': 'Castlevania: Lords of Shadow',
+  'strength': 0.1},
+ {'source': ' General',
+  'target': "Sam & Max: The Devil's Playhouse - Episode 2: The Tomb of Sammun-Mak",
+  'strength': 0.1},
+ {'source': ' Modern', 'target': 'Grand Theft Auto IV', 'strength': 0.001},
+ {'source': ' Modern', 'target': 'Grand Theft Auto V', 'strength': 0.001},
+ {'source': ' Modern',
+  'target': 'Uncharted 2: Among Thieves',
+  'strength': 0.001},
+ {'source': ' Modern', 'target': 'The Last of Us', 'strength': 0.2},
+ {'source': ' Modern',
+  'target': 'Call of Duty: Modern Warfare 2',
+  'strength': 0.1},
+ {'source': ' Modern',
+  'target': 'Metal Gear Solid 4: Guns of the Patriots',
+  'strength': 0.001},
+ {'source': ' Modern',
+  'target': 'Call of Duty 4: Modern Warfare',
+  'strength': 0.1},
+ {'source': ' Modern',
+  'target': "Uncharted 3: Drake's Deception",
+  'strength': 0.001},
+ {'source': ' Modern', 'target': 'Far Cry 3', 'strength': 0.1},
+ {'source': ' Modern', 'target': 'Dishonored', 'strength': 0.001},
+ {'source': ' Modern', 'target': 'L.A. Noire', 'strength': 0.001},
+ {'source': ' Modern',
+  'target': 'Metal Gear Solid HD Collection',
+  'strength': 0.001},
+ {'source': ' Modern',
+  'target': 'Battlefield: Bad Company 2 Vietnam',
+  'strength': 0.1},
+ {'source': ' Modern',
+  'target': 'Battlefield: Bad Company 2',
+  'strength': 0.1},
+ {'source': ' Modern',
+  'target': "Uncharted: Drake's Fortune",
+  'strength': 0.001},
+ {'source': ' Modern',
+  'target': 'Call of Duty: Modern Warfare 3',
+  'strength': 0.1},
+ {'source': ' Modern',
+  'target': 'The Last of Us: Left Behind',
+  'strength': 0.001},
+ {'source': ' Modern', 'target': 'Resistance 2', 'strength': 0.1},
+ {'source': ' Modern', 'target': 'Tomb Raider', 'strength': 0.001},
+ {'source': ' Modern', 'target': 'Max Payne 3', 'strength': 0.1},
+ {'source': ' Modern', 'target': 'Heavy Rain', 'strength': 0.1},
+ {'source': ' Modern',
+  'target': "Tom Clancy's Rainbow Six Vegas",
+  'strength': 0.1},
+ {'source': 'online', 'target': 'Grand Theft Auto IV', 'strength': 0.001},
+ {'source': 'online', 'target': 'Grand Theft Auto V', 'strength': 0.001},
+ {'source': 'online', 'target': 'The Last of Us', 'strength': 0.2},
+ {'source': 'online', 'target': 'LittleBigPlanet', 'strength': 0.001},
+ {'source': 'online', 'target': 'Red Dead Redemption', 'strength': 0.001},
+ {'source': 'online',
+  'target': 'Call of Duty: Modern Warfare 2',
+  'strength': 0.001},
+ {'source': 'online', 'target': 'Street Fighter IV', 'strength': 0.1},
+ {'source': 'online',
+  'target': 'Metal Gear Solid 4: Guns of the Patriots',
+  'strength': 0.001},
+ {'source': 'online',
+  'target': 'Call of Duty 4: Modern Warfare',
+  'strength': 0.001},
+ {'source': 'online', 'target': 'Mass Effect 3', 'strength': 0.1},
+ {'source': 'online',
+  'target': "Uncharted 3: Drake's Deception",
+  'strength': 0.001},
+ {'source': 'online', 'target': 'Super Street Fighter IV', 'strength': 0.1},
+ {'source': 'online', 'target': 'Rock Band', 'strength': 0.1},
+ {'source': 'online', 'target': 'Borderlands 2', 'strength': 0.1},
+ {'source': 'online', 'target': 'Rock Band 2', 'strength': 0.1},
+ {'source': 'online', 'target': 'Dark Souls II', 'strength': 0.1},
+ {'source': 'online', 'target': 'Killzone 2', 'strength': 0.001},
+ {'source': 'online', 'target': 'LittleBigPlanet 2', 'strength': 0.001},
+ {'source': 'online', 'target': 'Far Cry 3', 'strength': 0.001},
+ {'source': 'online',
+  'target': "Assassin's Creed: Brotherhood",
+  'strength': 0.001},
+ {'source': 'online', 'target': 'XCOM: Enemy Unknown', 'strength': 0.1},
+ {'source': 'online', 'target': 'FIFA Soccer 11', 'strength': 0.1},
+ {'source': 'online', 'target': 'Dead Space 2', 'strength': 0.1}]
+
+    var nodes = [...baseNodes]
+    var links = [...baseLinks]
+
+    function getNeighbors(node) {
+        return baseLinks.reduce(function (neighbors, link) {
+                if (link.target.id === node.id) {
+                    neighbors.push(link.source.id)
+                } else if (link.source.id === node.id) {
+                    neighbors.push(link.target.id)
+                }
+                return neighbors
+            },
+            [node.id]
+        )
+    }
+
+    function isNeighborLink(node, link) {
+        return link.target.id === node.id || link.source.id === node.id
+    }
+
+
+    function getNodeColor(node, neighbors) {
+        if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
+            return node.level === 1 ? '#e668ec' : '#3bc3d8'
+        }
+
+        return node.level === 1 ? '#ffbeff' : '#d1f7fd'
+    }
+
+
+    function getLinkColor(node, link) {
+        return isNeighborLink(node, link) ? '#7f7f7f' : '#E5E5E5'
+    }
+
+    function getTextColor(node, neighbors) {
+        return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'black' : 'gray'
+    }
+
+    var width = window.innerWidth
+    var height = window.innerHeight
+    var radius = 60
+
+    var svg = d3.select('svg')
+    svg.attr('width', width).attr('height', height)
+
+    var linkElements,
+        nodeElements,
+        textElements
+
+    // we use svg groups to logically group the elements together
+    var linkGroup = svg.append('g').attr('class', 'links')
+    var nodeGroup = svg.append('g').attr('class', 'nodes')
+    var textGroup = svg.append('g').attr('class', 'texts')
+
+    // we use this reference to select/deselect
+    // after clicking the same element twice
+    var selectedId
+
+    // simulation setup with all forces
+    var linkForce = d3
+        .forceLink()
+        .id(function (link) { return link.id })
+        .strength(function (link) { return link.strength })
+
+    var simulation = d3
+        .forceSimulation()
+        .force('link', linkForce)
+        .force('charge', d3.forceManyBody().strength(-100))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+
+    var dragDrop = d3.drag().on('start', function (node) {
+        node.fx = node.x
+        node.fy = node.y
+    }).on('drag', function (node) {
+        simulation.alphaTarget(0.7).restart()
+        node.fx = d3.event.x
+        node.fy = d3.event.y
+    }).on('end', function (node) {
+        if (!d3.event.active) {
+            simulation.alphaTarget(0)
+        }
+        node.fx = null
+        node.fy = null
+    })
+
+    // select node is called on every click
+    // we either update the data according to the selection
+    // or reset the data if the same node is clicked twice
+    function selectNode(selectedNode) {
+        if (selectedId === selectedNode.id) {
+            selectedId = undefined
+            resetData()
+            updateSimulation()
+        } else {
+            selectedId = selectedNode.id
+            updateData(selectedNode)
+            updateSimulation()
+        }
+
+        var neighbors = getNeighbors(selectedNode)
+
+        // we modify the styles to highlight selected nodes
+        nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
+        textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
+        linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
+    }
+
+    // this helper simple adds all nodes and links
+    // that are missing, to recreate the initial state
+    function resetData() {
+        var nodeIds = nodes.map(function (node) { return node.id })
+
+        baseNodes.forEach(function (node) {
+            if (nodeIds.indexOf(node.id) === -1) {
+                nodes.push(node)
+            }
+        })
+
+        links = baseLinks
+    }
+
+    // diffing and mutating the data
+    function updateData(selectedNode) {
+        var neighbors = getNeighbors(selectedNode)
+        var newNodes = baseNodes.filter(function (node) {
+            return neighbors.indexOf(node.id) > -1 || node.level === 1
+        })
+
+        var diff = {
+            removed: nodes.filter(function (node) { return newNodes.indexOf(node) === -1 }),
+            added: newNodes.filter(function (node) { return nodes.indexOf(node) === -1 })
+        }
+
+        diff.removed.forEach(function (node) { nodes.splice(nodes.indexOf(node), 1) })
+        diff.added.forEach(function (node) { nodes.push(node) })
+
+        links = baseLinks.filter(function (link) {
+            return link.target.id === selectedNode.id || link.source.id === selectedNode.id
+        })
+    }
+
+    function updateGraph() {
+        // links
+        linkElements = linkGroup.selectAll('line')
+            .data(links, function (link) {
+                return link.target.id + link.source.id
+            })
+
+        linkElements.exit().remove()
+
+        var linkEnter = linkElements
+            .enter().append('line')
+            .attr('stroke-width', 1)
+            .attr('stroke', 'rgba(50, 50, 50, 0.2)')
+
+        linkElements = linkEnter.merge(linkElements)
+
+        // nodes
+        nodeElements = nodeGroup.selectAll('circle')
+            .data(nodes, function (node) { return node.id })
+
+        nodeElements.exit().remove()
+
+        var nodeEnter = nodeElements
+            .enter()
+            .append('circle')
+            .attr('r', function (node) { return node.level === 1 ? 15 : node.level === 2 ? 10 : 6})
+            .attr('fill', function (node) { return node.group === 1 ? '#3bc3d8' : node.group === 2 ? '#e668ec' : '#FF5733' })
+            .call(dragDrop)
+            // we link the selectNode method here
+            // to update the graph on every click
+            .on('click', selectNode)
+
+        nodeElements = nodeEnter.merge(nodeElements)
+
+        // texts
+        textElements = textGroup.selectAll('text')
+            .data(nodes, function (node) { return node.id })
+
+        textElements.exit().remove()
+
+        var textEnter = textElements
+            .enter()
+            .append('text')
+            .text(function (node) { return node.label })
+            .attr('font-size', function (node) { return node.level === 1 ? 14 : node.level === 2 ? 12 : 8})
+            .attr('font-family', 'sans-serif')
+            .attr('font-weight', 'bold')
+            .attr('dx', 12)
+            .attr('dy', 10)
+
+        textElements = textEnter.merge(textElements)
+    }
+
+    function updateSimulation() {
+        updateGraph()
+
+        simulation.nodes(nodes).on('tick', () => {
+            nodeElements
+                .attr('cx', function (node) { return node.x = Math.max(radius, Math.min(width - radius, node.x)); })
+                .attr('cy', function (node) { return node.y = Math.max(radius, Math.min(height - radius, node.y)); })
+            textElements
+                .attr('x', function (node) { return node.x })
+                .attr('y', function (node) { return node.y })
+            linkElements
+                .attr('x1', function (link) { return link.source.x })
+                .attr('y1', function (link) { return link.source.y })
+                .attr('x2', function (link) { return link.target.x })
+                .attr('y2', function (link) { return link.target.y })
+        })
+
+        simulation.force('link').links(links)
+        simulation.alphaTarget(0.7).restart()
+    }
+
+    // last but not least, we call updateSimulation
+    // to trigger the initial render
+    updateSimulation()
+
+</script>
