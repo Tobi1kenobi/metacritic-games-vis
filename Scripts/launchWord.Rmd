@@ -1,0 +1,6 @@
+```{r}
+library(shiny)
+library(tidyverse)
+runApp('../apps/wordCloudApp/')
+```
+
