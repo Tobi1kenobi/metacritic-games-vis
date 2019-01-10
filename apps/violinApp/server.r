@@ -5,17 +5,19 @@ shinyServer(function(input, output, session) {
     if (length(input$name) == 0) {
       print("Please select at least one game")
     } else {
-      df <- metaresults[metaresults$name == input$name, ]
-      
+
+
+
+      df <- metafile[metafile$game == input$name, ]
 
       p <- df %>%
         plot_ly(type = 'violin') %>%
         add_trace(
-          x = ~name[df$type == 'meta'],
-          y = ~score[df$type == 'meta'],
-          legendgroup = 'Metascore',
-          scalegroup = 'Metascore',
-          name = 'Metascore',
+          x = ~game[df$type == 'critic'],
+          y = ~score[df$type == 'critic'],
+          legendgroup = 'Critic score',
+          scalegroup = 'Critic score',
+          name = 'Critic score',
           side = 'negative',
           box = list(
             visible = T
@@ -28,15 +30,17 @@ shinyServer(function(input, output, session) {
           )
         ) %>%
         add_trace(
-          x = ~name[df$type == 'user'],
-          y = ~score[df$type == 'user'],
-          legendgroup = 'Userscore',
-          scalegroup = 'Userscore',
-          name = 'Userscore',
+          x = ~game[df$type == 'user'],
+          y = ~score[df$type == 'user']*10,
+          legendgroup = 'User score',
+          scalegroup = 'User score',
+          name = 'User score',
           side = 'positive',
           box = list(
             visible = T
           ),
+          bandwidth = 1,
+          jitter = 0,
           meanline = list(
             visible = T
           ),
@@ -55,18 +59,9 @@ shinyServer(function(input, output, session) {
           violingap = 0,
           violingroupgap = 0,
           violinmode = 'overlay'
+#          violinmode = 'overlay'
         )
       p
-
-
-
-
-
-#      ggplot(df_trend, aes(x = name, y = userscore, color = name)) +
-#        geom_violin() +
-#        labs(x = "metascore", y = "Userscore", title = "Ideal Points for din mor") +
-#        scale_colour_hue("clarity", l = 70, c = 150) + ggthemes::theme_few()
-
     }
 
   })
