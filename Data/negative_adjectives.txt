@@ -1,4 +1,4 @@
-a bore
+﻿a bore
 abysmal
 adverse
 alarming
@@ -183,7 +183,6 @@ no
 nobody
 nondescript
 nonsense
-not
 noxious
 objectionable
 obnoxious

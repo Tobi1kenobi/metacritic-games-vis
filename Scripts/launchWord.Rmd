@@ -1,6 +1,12 @@
 ```{r}
 library(shiny)
+library(shinyWidgets)
 library(tidyverse)
+library(memoise)
+library(tm)
+library(wordcloud)
+'%ni%' <- Negate('%in%')
+
 runApp('../apps/wordCloudApp/')
 ```
 

@@ -257,7 +257,6 @@ nurturing
 nutritious
 offbeat
 okay
-one
 open
 optimistic
 original
@@ -395,3 +394,5 @@ yes
 yummy
 zeal
 zealous
+improved
+incredible

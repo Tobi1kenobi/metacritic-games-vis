@@ -1,31 +1,28 @@
 fluidPage(
   # Application title
-  titlePanel("Word Cloud"),
+  titlePanel("Word Cloud of loaded adjectivs in game reviews"),
 
   sidebarLayout(
     # Sidebar with a slider and selection inputs
     sidebarPanel(
       selectInput("selection", "Choose a game:",
                   choices = metafile$nameAndConsole),
-      actionButton("update", "Change game"),
+#      actionButton(input = "update", "Change game"),
       hr(),
-      actionButton("critic", "Critic reviews"),
-      actionButton("user", "User reviews"),
+#      selectInput('scoreType', 'Review Type',c('Critic', 'User')),
+      awesomeRadio(inputId = "scoreType",
+        label = "Score", choices = c("Critic","User"), selected = "Critic"),
       hr(),
-
-      sliderInput("freq",
-                  "Minimum Frequency:",
-                  min = 1,  max = 50, value = 15),
       sliderInput("max",
                   "Maximum Number of Words:",
-                  min = 1,  max = 300,  value = 100)
+                  min = 1,  max = 100,  value = 25)
     ),
 
     # Show Word Cloud
     mainPanel(
-      plotOutput("plot"),
-      width = 18,
-      height = 180
+      htmlOutput('selected_var'),
+      plotOutput("plot", height = '600px', width = '110%')
+
     )
   )
 )
