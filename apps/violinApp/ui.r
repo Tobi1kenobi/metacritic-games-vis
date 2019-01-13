@@ -1,25 +1,18 @@
-library(shiny)
-library(plotly)
-library(tidyverse)
-library(ggplot2)
-
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Tesdt title"),
+  titlePanel("Distribution of game scores"),
 
   sidebarPanel(
-    h3("Ideal Points Estimation"),
     # Select Justices name here
     selectizeInput("name",
-                   label = "Game Name(s) of Interest",
+                   label = "Choose a game:",
                    choices = unique(metafile$game),
                    multiple = T,
                    options = list(maxItems = 5, placeholder = 'Select a name'),
-                   selected = "God of War (PS4)"),
+                   selected = c('BioShock (PC)', 'BioShock 2 (PC)')),
     # Term plot
-    plotOutput("termPlot", height = 20),
-    helpText('generic help text')
+    plotOutput("termPlot", height = 20)
   ),
 
   # Show a plot of the generated distribution

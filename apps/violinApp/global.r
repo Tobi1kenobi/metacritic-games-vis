@@ -1,1 +1,1 @@
-metafile <- read_csv('data/longFormat.csv')
+metafile <- read_csv('../../Data/gamesAndScoreLongFormat.csv')
