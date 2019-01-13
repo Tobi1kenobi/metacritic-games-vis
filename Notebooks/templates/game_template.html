@@ -228,9 +228,9 @@ function sumScoreColour(node) {
             .append('circle')
             .attr('r', function (node) { return node.level === 1 ? 15 : node.level === 2 ? 10 : 6})
             .attr('fill', function (node) { return node.group === 1 ? sumScoreColour(node) :
-                 node.group === 2 ? '#377eb8' :
-                 node.group === 3 ? '#984ea3' :
-                 node.group === 4 ? '#e41a1c' : '#ff7f00' })
+                 node.group === 2 ? '#80b1d3' :
+                 node.group === 3 ? '#e78ac3' :
+                 node.group === 4 ? '#fb8072' : '#ff9d42' })
             .call(dragDrop)
             // we link the selectNode method here
             // to update the graph on every click
