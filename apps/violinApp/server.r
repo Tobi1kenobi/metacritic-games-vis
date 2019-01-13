@@ -24,7 +24,8 @@ shinyServer(function(input, output, session) {
           hoveron = 'kde',
           bandwidth = 10,
           jitter = .1,
-          spanmode = 'hard',
+          spanmode = 'manual',
+          span = list(c(0,100)),
           box = list(
             visible = T,
             width = .5
@@ -53,7 +54,8 @@ shinyServer(function(input, output, session) {
           side = 'positive',
           scalemode = 'count',
           hoveron = 'kde',
-          spanmode = 'hard',
+          spanmode = 'manual',
+          span = list(c(0,100)),
           points = 'all',
           box = list(
             visible = T,
