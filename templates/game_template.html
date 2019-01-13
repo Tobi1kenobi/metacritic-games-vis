@@ -176,7 +176,7 @@
         // nodeElements.attr('fill', function (node) { return node.group === 1 ? '#3bc3d8' : node.group === 2 ? '#e668ec' : '#FF5733' })
         nodeElements.attr('opacity', 1)
         textElements.attr('fill', 'black')
-        linkElements.attr('stroke', 'rgba(50, 50, 50, 0.2)')
+        linkElements.attr('stroke', 'rgba(50, 50, 50, 0.5)')
         textElements.attr('font-size', function (node) { return node.level === 1 ? 14 : node.level === 2 ? 12 : 8})
     }
 
@@ -213,7 +213,7 @@ function sumScoreColour(node) {
         var linkEnter = linkElements
             .enter().append('line')
             .attr('stroke-width', 1)
-            .attr('stroke', 'rgba(50, 50, 50, 0.2)')
+            .attr('stroke', 'rgba(50, 50, 50, 0.5)')
 
         linkElements = linkEnter.merge(linkElements)
 
@@ -228,10 +228,12 @@ function sumScoreColour(node) {
             .append('circle')
             .attr('r', function (node) { return node.level === 1 ? 15 : node.level === 2 ? 10 : 6})
             .attr('fill', function (node) { return node.group === 1 ? sumScoreColour(node) :
-                 node.group === 2 ? '#377eb8' :
-                 node.group === 3 ? '#984ea3' :
-                 node.group === 4 ? '#e41a1c' : '#ff7f00' })
+                 node.group === 2 ? '#80b1d3' :
+                 node.group === 3 ? '#e78ac3' :
+                 node.group === 4 ? '#fb8072' : '#ff9d42' })
             .call(dragDrop)
+            .attr('stroke', 'rgba(50, 50, 50, 0.8)')
+            .attr('stroke-width', 1)
             // we link the selectNode method here
             // to update the graph on every click
             .on('mouseover', hoverNode)
