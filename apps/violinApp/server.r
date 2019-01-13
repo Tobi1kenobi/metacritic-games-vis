@@ -8,7 +8,8 @@ shinyServer(function(input, output, session) {
 
 
 
-      df <- metafile[metafile$game == input$name, ]
+      df <- metafile[metafile$game == input$name, ] %>%
+      	filter(score <= 100)
 
       p <- df %>%
         plot_ly(type = 'violin') %>%
@@ -19,14 +20,29 @@ shinyServer(function(input, output, session) {
           scalegroup = 'Critic score',
           name = 'Critic score',
           side = 'negative',
+          scalemode = 'count',
+          hoveron = 'kde',
+          bandwidth = 10,
+          jitter = .1,
+          spanmode = 'manual',
+          span = list(c(0,100)),
           box = list(
-            visible = T
+            visible = T,
+            width = .5
           ),
+          points = 'all',
+          pointpos = -.5,
           meanline = list(
             visible = T
           ),
           line = list(
-            color = 'blue'
+            color = '#ffd263',
+            outliercolor = '#ff0000'
+          ),
+          marker = list(
+          	color = '#8e7537',
+          	outliercolor = '#ff0000',
+          	opacity = 0.25
           )
         ) %>%
         add_trace(
@@ -36,16 +52,29 @@ shinyServer(function(input, output, session) {
           scalegroup = 'User score',
           name = 'User score',
           side = 'positive',
+          scalemode = 'count',
+          hoveron = 'kde',
+          spanmode = 'manual',
+          span = list(c(0,100)),
+          points = 'all',
           box = list(
-            visible = T
+            visible = T,
+            width = .5
           ),
-          bandwidth = 1,
-          jitter = 0,
+          pointpos = .5,
+          bandwidth = 10,
+          jitter = .1,
           meanline = list(
             visible = T
           ),
           line = list(
-            color = 'green'
+            color = '#62d5ff',
+            outliercolor = '#ff0000'
+          ),
+          marker = list(
+          	color = '#408eaa',
+          	outliercolor = '#ff0000',
+          	opacity = 0.25
           )
         ) %>% 
         layout(
@@ -54,7 +83,8 @@ shinyServer(function(input, output, session) {
           ),
           yaxis = list(
             title = "",
-            zeroline = F
+            zeroline = F,
+            range = c(0,120)
           ),
           violingap = 0,
           violingroupgap = 0,

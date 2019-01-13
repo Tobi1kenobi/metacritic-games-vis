@@ -35,7 +35,7 @@ function(input, output, session) {
     v <- terms()
 #    wordcloud_rep(v, random.order=FALSE, scale=c(3.5, 0.35),
     wordcloud_rep(v, random.order=FALSE, scale=c(4, 0.4),
-      colors = c("#aa44a0", "#7ec635", "#ffb500"), title.size=2.0,
+      colors = c("#aa44a0", "#7ec635", "#7f7f7f"), title.size=2.0,
       max.words=input$max, match.colors = FALSE, title.bg.colors = 'white')
   })
 }
