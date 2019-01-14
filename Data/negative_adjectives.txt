@@ -46,7 +46,6 @@ crude
 cruel
 cry
 cutting
-damage
 damaging
 dastardly
 dated
@@ -87,7 +86,6 @@ failure
 faulty
 fear
 feeble
-fight
 filthy
 forced
 formulaic
@@ -177,7 +175,6 @@ needless
 needs editing
 negate
 negative
-never
 no
 nobody
 nondescript

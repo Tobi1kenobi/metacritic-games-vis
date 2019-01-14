@@ -1,3 +1,11 @@
+library(rsconnect)
+library(shiny)
+library(shinyWidgets)
+library(tidyverse)
+library(memoise)
+library(tm)
+library(wordcloud)
+
 function(input, output, session) {
   # Define a reactive expression for the document term matrix
 

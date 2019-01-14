@@ -1,3 +1,7 @@
+library(shiny)
+library(tidyverse)
+library(plotly)
+
 shinyServer(function(input, output, session) {
 
   output$trendPlot <- renderPlotly({

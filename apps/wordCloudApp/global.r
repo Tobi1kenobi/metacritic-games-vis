@@ -1,13 +1,25 @@
-metafile <- read_delim('../../Data/critic_and_users_adjective_only.csv', delim = ',',col_types = cols(.default = "c")) %>% 
+library(rsconnect)
+library(shiny)
+library(shinyWidgets)
+library(tidyverse)
+library(memoise)
+library(tm)
+library(wordcloud)
+
+'%ni%' <- Negate('%in%')
+
+metafile <- read_delim('data/critic_and_users_adjective_only.csv', delim = ',',col_types = cols(.default = "c")) %>% 
 	mutate(nameAndConsole = paste(name, ' (' ,console, ')', sep = '')) %>% 
 	select(nameAndConsole, "Critic" = `critic adjectives`, 'User' = `user adjectives`, metascore, userscore)
 
-metafile2 <- read_delim('../../Data/extra_details_complete.csv', delim = ',',col_types = cols(.default = "c")) %>%
+metafile2 <- read_delim('data/extra_details_complete.csv', delim = ',',col_types = cols(.default = "c")) %>%
 	mutate(nameAndConsole = paste(name, ' (' ,console, ')', sep = '')) %>% 
 	select(nameAndConsole, developer)
 
-negWords <- scan('../../Data/negative_adjectives.txt', what = '', sep = '\n')
-posWords <- scan('../../Data/positive_adjectives.txt', what = '', sep = '\n')
+negWords <- read_delim('data//negative_adjectives.csv', delim = '\n', col_names = FALSE)
+posWords <- read_delim('data/positive_adjectives.csv', delim = '\n', col_names = FALSE)
+
+
 
 getScore <- memoise(function(game, type){
 
@@ -16,7 +28,7 @@ getScore <- memoise(function(game, type){
 	if (type == 'Critic'){
 		scoreType <- paste('<b>Average critic score: ', line[,'metascore'],'</b>')
 	} else {
-		scoreType <- paste('<b>Average user score: ', line[,'userscore'],'</b>')
+		scoreType <- paste('<b>Average user score: ', as.character(as.numeric(line[,'userscore'])*10),'</b>')
 	}
 })
 
@@ -28,8 +40,8 @@ getTermMatrix <- memoise(function(game, type) {
 	adjecs <- unlist(line[,type])
 	
 	crit_words <- unlist(strsplit(adjecs, ','))
-	crit_words_neg <- paste(crit_words[crit_words %in% negWords], collapse = ' ')
-	crit_words_pos <- paste(crit_words[crit_words %in% posWords], collapse = ' ')
+	crit_words_neg <- paste(crit_words[crit_words %in% unlist(negWords)], collapse = ' ')
+	crit_words_pos <- paste(crit_words[crit_words %in% unlist(posWords)], collapse = ' ')
 	crit_words_neu <- paste(crit_words[crit_words %ni% c(negWords, posWords)], collapse = ' ')
 	crit_words_all <- c(crit_words_neg, crit_words_pos, crit_words_neu)
 

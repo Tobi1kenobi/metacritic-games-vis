@@ -1,3 +1,11 @@
+library(rsconnect)
+library(shiny)
+library(shinyWidgets)
+library(tidyverse)
+library(memoise)
+library(tm)
+library(wordcloud)
+
 fluidPage(
   # Application title
   titlePanel("Word Cloud of loaded adjectivs in game reviews"),
@@ -6,7 +14,9 @@ fluidPage(
     # Sidebar with a slider and selection inputs
     sidebarPanel(
       selectInput("selection", "Choose a game:",
-                  choices = metafile$nameAndConsole),
+      	choices = metafile$nameAndConsole,
+      	selected = 'Into the Breach (PC)'),
+
 #      actionButton(input = "update", "Change game"),
       hr(),
 #      selectInput('scoreType', 'Review Type',c('Critic', 'User')),
