@@ -10,7 +10,7 @@ library(wordcloud)
 
 metafile <- read_delim('data/critic_and_users_adjective_only.csv', delim = ',',col_types = cols(.default = "c")) %>% 
 	mutate(nameAndConsole = paste(name, ' (' ,console, ')', sep = '')) %>% 
-	select(nameAndConsole, "Critic" = `critic adjectives`, 'User' = `user adjectives`, metascore, userscore)
+	select(nameAndConsole, "Critic reviews" = `critic adjectives`, 'User reviews' = `user adjectives`, metascore, userscore)
 
 metafile2 <- read_delim('data/extra_details_complete.csv', delim = ',',col_types = cols(.default = "c")) %>%
 	mutate(nameAndConsole = paste(name, ' (' ,console, ')', sep = '')) %>% 
@@ -25,7 +25,7 @@ getScore <- memoise(function(game, type){
 
 	line <- metafile[metafile$nameAndConsole == game, ]
 
-	if (type == 'Critic'){
+	if (type == 'Critic reviews'){
 		scoreType <- paste('<b>Average critic score: ', line[,'metascore'],'</b>')
 	} else {
 		scoreType <- paste('<b>Average user score: ', as.character(as.numeric(line[,'userscore'])*10),'</b>')

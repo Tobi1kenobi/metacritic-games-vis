@@ -26,7 +26,7 @@ function(input, output, session) {
   # Make the wordcloud drawing predictable during a session
   wordcloud_rep <- repeatable(comparison.cloud)
 
-  dinMor <- reactive({
+  scoreVar <- reactive({
 
     input$scoreType
 
@@ -36,7 +36,7 @@ function(input, output, session) {
     })
 
     output$selected_var <- renderText({
-      dinMor()
+      scoreVar()
       })
 
   output$plot <- renderPlot({
