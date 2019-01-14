@@ -9,7 +9,11 @@ shinyServer(function(input, output, session) {
 
 
       df <- metafile[metafile$game == input$name, ] %>%
-      	filter(score <= 100)
+      	filter(score <= 100) %>% 
+      	add_row(game = input$name, score = 100, type = 'critic') %>% 
+      	add_row(game = input$name, score = 0, type = 'critic') %>% 
+      	add_row(game = input$name, score = 10, type = 'user') %>% 
+      	add_row(game = input$name, score = 0, type = 'user')
 
       p <- df %>%
         plot_ly(type = 'violin') %>%
@@ -20,17 +24,16 @@ shinyServer(function(input, output, session) {
           scalegroup = 'Critic score',
           name = 'Critic score',
           side = 'negative',
-          scalemode = 'count',
-          hoveron = 'kde',
+          scalemode = 'width',
+          hoveron = 'points',
           bandwidth = 10,
           jitter = .1,
-          spanmode = 'manual',
-          span = list(c(0,100)),
+          spanmode =  'hard',
           box = list(
             visible = T,
             width = .5
           ),
-          points = 'all',
+          points = 'outliers',
           pointpos = -.5,
           meanline = list(
             visible = T
@@ -52,11 +55,10 @@ shinyServer(function(input, output, session) {
           scalegroup = 'User score',
           name = 'User score',
           side = 'positive',
-          scalemode = 'count',
-          hoveron = 'kde',
-          spanmode = 'manual',
-          span = list(c(0,100)),
-          points = 'all',
+          scalemode = 'width',
+          hoveron = 'points',
+          spanmode = 'hard',
+          points = 'outliers',
           box = list(
             visible = T,
             width = .5
@@ -77,6 +79,7 @@ shinyServer(function(input, output, session) {
           	opacity = 0.25
           )
         ) %>% 
+        config(displayModeBar = F) %>% 
         layout(
           xaxis = list(
               title = ""  
@@ -84,7 +87,7 @@ shinyServer(function(input, output, session) {
           yaxis = list(
             title = "",
             zeroline = F,
-            range = c(0,120)
+            range = c(-10,119)
           ),
           violingap = 0,
           violingroupgap = 0,
