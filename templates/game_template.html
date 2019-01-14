@@ -303,8 +303,8 @@ function sumScoreColour(node) {
       .attr("transform", "translate(20,380)");
 
     var categorical = d3.scaleOrdinal()
-        .domain(["Genre",'Multiplayer', "Company",'Franchise'])
-        .range(['#80b1d3', "#e78ac3",'#fb8072','#ff9d42']);
+        .domain(['Franchise',"Genre",'Multiplayer', "Company"])
+        .range(['#ff9d42','#80b1d3', "#e78ac3",'#fb8072']);
 
     var legendCategorical = d3.legendColor()
         .shape('circle')
