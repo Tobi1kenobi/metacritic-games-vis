@@ -20,9 +20,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js"></script>
 <script>
 
-    var baseNodes = {{ game_nodes }}
+    var baseNodes = {{ game_nodes | safe }}
 
-    var baseLinks = {{ game_links }}
+    var baseLinks = {{ game_links | safe }}
 
     var nodes = [...baseNodes]
     var links = [...baseLinks]
