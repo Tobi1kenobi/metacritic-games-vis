@@ -1,0 +1,13 @@
+<html>
+   <body>
+       <p>{{ error_message | safe }}</p>
+      <form action = "/recommendations/submit" method = "POST">
+        Please provide the console of the game in the following format: </br>
+        PC, VITA, 3DS, DC, DS, GBA, GC, N64, PC, PS, PS2, PS3, PS4, PSP, Switch, VITA, WII, WIIU, X360, XBOX, XONE
+         <p>Console <input type = "text" name = "console" /></p></br>
+        Please provide the full title of the game you are interested in:
+         <p>Game <input type = "text" name = "game" /></p>
+         <p><input type = "Submit" value = "submit" /></p>
+      </form>
+   </body>
+</html>

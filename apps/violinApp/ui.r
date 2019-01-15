@@ -1,3 +1,7 @@
+library(shiny)
+library(tidyverse)
+library(plotly)
+
 shinyUI(fluidPage(
 
   # Application title

@@ -1,3 +1,7 @@
+library(shiny)
+library(tidyverse)
+library(plotly)
+
 shinyServer(function(input, output, session) {
 
   output$trendPlot <- renderPlotly({
@@ -25,27 +29,27 @@ shinyServer(function(input, output, session) {
           name = 'Critic score',
           side = 'negative',
           scalemode = 'width',
-          hoveron = 'points',
+          hoveron = 'violins',
           bandwidth = 10,
           jitter = .1,
           spanmode =  'hard',
-          box = list(
-            visible = T,
-            width = .5
-          ),
+#          box = list(
+#            visible = F,
+#            width = .5
+#          ),
           points = 'outliers',
           pointpos = -.5,
           meanline = list(
-            visible = T
+            visible = T,
+            width = 1,
+            color = '#8e7537'
           ),
           line = list(
-            color = '#ffd263',
-            outliercolor = '#ff0000'
+            color = '#ffd263'
           ),
           marker = list(
           	color = '#8e7537',
-          	outliercolor = '#ff0000',
-          	opacity = 0.25
+          	opacity = 0.5
           )
         ) %>%
         add_trace(
@@ -56,27 +60,29 @@ shinyServer(function(input, output, session) {
           name = 'User score',
           side = 'positive',
           scalemode = 'width',
-          hoveron = 'points',
+          hoveron = 'violins',
           spanmode = 'hard',
           points = 'outliers',
-          box = list(
-            visible = T,
-            width = .5
-          ),
+#          box = list(
+#            visible = F,
+#            width = .5
+#          ),
           pointpos = .5,
           bandwidth = 10,
           jitter = .1,
           meanline = list(
-            visible = T
+            visible = T,
+            width = 1,
+            color = '#408eaa'
           ),
           line = list(
-            color = '#62d5ff',
-            outliercolor = '#ff0000'
+            color = '#62d5ff'
+#            outliercolor = '#ff0000'
           ),
           marker = list(
           	color = '#408eaa',
-          	outliercolor = '#ff0000',
-          	opacity = 0.25
+#          	outliercolor = '#ff0000',
+          	opacity = 0.5
           )
         ) %>% 
         config(displayModeBar = F) %>% 
