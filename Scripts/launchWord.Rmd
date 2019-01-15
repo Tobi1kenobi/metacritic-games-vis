@@ -1,12 +1,27 @@
 ```{r}
+library(rsconnect)
 library(shiny)
 library(shinyWidgets)
 library(tidyverse)
 library(memoise)
 library(tm)
 library(wordcloud)
-'%ni%' <- Negate('%in%')
 
-runApp('../apps/wordCloudApp/')
+runApp('C:/Users/olive/Desktop/KU/Vis/metacritic-games-vis/apps/wordCloudApp')
+
+rsconnect::deployApp('C:/Users/olive/Desktop/KU/Vis/metacritic-games-vis/apps/wordCloudApp')
+```
+```{r}
+line <- metafile[metafile$nameAndConsole == 'The Last of Us (PS3)', ]
+
+adjecs <- unlist(line[,'Critic'])
+typeof(crit_words)
+typeof(negWords)
+crit_words <- unlist(strsplit(adjecs, ','))
+crit_words_neg <- paste(crit_words[crit_words %in% unlist(negWords)], collapse = ' ')
+crit_words_pos <- paste(crit_words[crit_words %in% posWords], collapse = ' ')
+crit_words_neu <- paste(crit_words[crit_words %ni% c(negWords, posWords)], collapse = ' ')
+crit_words_all <- c(crit_words_neg, crit_words_pos, crit_words_neu)
+print(crit_words_all)
 ```
 

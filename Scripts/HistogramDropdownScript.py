@@ -239,7 +239,7 @@ def main():
         temp_list = dict(label=list(console_dict)[i],
                          method='update',
                          args=[{'visible': big_bool[0:len(console_dict)][i]},
-                               {'title': list(console_dict)[i]}])
+                               {'title': "console: " + list(console_dict)[i]}])
         buttons_console_list.append(temp_list)
 
     #### publisher
@@ -276,48 +276,48 @@ def main():
     button_layer_1_height = 1.12
     updatemenus = list([
         dict(
-            active=0,
+            active=-1,
             buttons=buttons_console_list,
             name='Console',
             direction='down',
             pad={'r': 10, 't': 10},
-            showactive=True,
+            showactive=False,
             x=0,
             xanchor='left',
             y=button_layer_1_height,
             yanchor='top'
         ),
         dict(
-            active=0,
+            active=-1,
             buttons=buttons_pub_list,
             name='Publisher',
             direction='down',
             pad={'r': 10, 't': 10},
-            showactive=True,
+            showactive=False,
             x=0.1,
             xanchor='left',
             y=button_layer_1_height,
             yanchor='top'
         ),
         dict(
-            active=1,
+            active=-1,
             buttons=buttons_dev_list,
             name='Developer',
             direction='down',
             pad={'r': 10, 't': 10},
-            showactive=True,
+            showactive=False,
             x=0.35,
             xanchor='left',
             y=button_layer_1_height,
             yanchor='top'
         ),
         dict(
-            active=2,
+            active=-1,
             buttons=buttons_genre_list,
             name='Developer',
             direction='down',
             pad={'r': 10, 't': 10},
-            showactive=True,
+            showactive=False,
             x=0.755,
             xanchor='left',
             y=button_layer_1_height,

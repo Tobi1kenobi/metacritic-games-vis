@@ -1,3 +1,11 @@
+library(rsconnect)
+library(shiny)
+library(shinyWidgets)
+library(tidyverse)
+library(memoise)
+library(tm)
+library(wordcloud)
+
 function(input, output, session) {
   # Define a reactive expression for the document term matrix
 
@@ -18,7 +26,7 @@ function(input, output, session) {
   # Make the wordcloud drawing predictable during a session
   wordcloud_rep <- repeatable(comparison.cloud)
 
-  dinMor <- reactive({
+  scoreVar <- reactive({
 
     input$scoreType
 
@@ -28,7 +36,7 @@ function(input, output, session) {
     })
 
     output$selected_var <- renderText({
-      dinMor()
+      scoreVar()
       })
 
   output$plot <- renderPlot({

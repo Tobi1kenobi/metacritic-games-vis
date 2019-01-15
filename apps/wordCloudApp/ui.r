@@ -1,17 +1,27 @@
+library(rsconnect)
+library(shiny)
+library(shinyWidgets)
+library(tidyverse)
+library(memoise)
+library(tm)
+library(wordcloud)
+
 fluidPage(
   # Application title
-  titlePanel("Word Cloud of loaded adjectivs in game reviews"),
+  titlePanel("Word cloud of loaded adjectives in game reviews"),
 
   sidebarLayout(
     # Sidebar with a slider and selection inputs
     sidebarPanel(
       selectInput("selection", "Choose a game:",
-                  choices = metafile$nameAndConsole),
+      	choices = metafile$nameAndConsole,
+      	selected = 'Into the Breach (PC)'),
+
 #      actionButton(input = "update", "Change game"),
       hr(),
 #      selectInput('scoreType', 'Review Type',c('Critic', 'User')),
       awesomeRadio(inputId = "scoreType",
-        label = "Score", choices = c("Critic","User"), selected = "Critic"),
+        label = "Generated based on:", choices = c("Critic reviews","User reviews"), selected = "Critic reviews"),
       hr(),
       sliderInput("max",
                   "Maximum Number of Words:",
