@@ -5,6 +5,5 @@ library(plotly)
 runApp('../apps/violinApp')
 
 rsconnect::deployApp('C:/Users/olive/Desktop/KU/Vis/metacritic-games-vis/apps/violinApp')
-
 ```
 
